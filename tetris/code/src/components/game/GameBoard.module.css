@@ -1,0 +1,275 @@
+/* 游戏板容器 */
+.gameBoard {
+  display: grid;
+  gap: 1px;
+  background-color: var(--color-board-background, #1a1a1a);
+  border: 2px solid var(--color-board-border, #333);
+  border-radius: 8px;
+  padding: 4px;
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 1/2;
+  max-width: 400px;
+  max-height: 800px;
+  width: 100%;
+  height: auto;
+}
+
+/* 显示网格线 */
+.gameBoard.showGrid {
+  gap: 1px;
+  background-color: var(--color-grid-line, #2a2a2a);
+}
+
+/* 单个格子 */
+.cell {
+  position: relative;
+  background-color: var(--color-cell-empty, transparent);
+  border-radius: 2px;
+  transition: all var(--animation-speed, 300ms) ease;
+  min-height: 20px;
+  min-width: 20px;
+}
+
+/* 已填充的格子 */
+.cell.filled {
+  box-shadow: 
+    inset 2px 2px 4px rgba(255, 255, 255, 0.3),
+    inset -2px -2px 4px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* 当前方块 */
+.cell.current {
+  animation: currentBlock var(--animation-speed, 300ms) ease;
+  box-shadow: 
+    inset 2px 2px 6px rgba(255, 255, 255, 0.4),
+    inset -2px -2px 6px rgba(0, 0, 0, 0.4),
+    0 0 10px rgba(255, 255, 255, 0.3);
+  z-index: 10;
+}
+
+/* 幽灵方块 */
+.cell.ghost {
+  background-color: transparent !important;
+  border: 2px dashed var(--color-ghost, rgba(255, 255, 255, 0.3));
+  opacity: 0.6;
+  z-index: 5;
+}
+
+/* 特殊方块 */
+.cell.special {
+  position: relative;
+  overflow: hidden;
+}
+
+.cell.special::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(45deg, 
+    rgba(255, 255, 255, 0.1) 25%, 
+    transparent 25%, 
+    transparent 75%, 
+    rgba(255, 255, 255, 0.1) 75%);
+  background-size: 8px 8px;
+  animation: specialShine 2s linear infinite;
+}
+
+/* 炸弹方块特效 */
+.cell.special-bomb {
+  box-shadow: 
+    inset 2px 2px 4px rgba(255, 100, 100, 0.3),
+    inset -2px -2px 4px rgba(150, 0, 0, 0.3),
+    0 0 15px rgba(255, 50, 50, 0.5);
+}
+
+.cell.special-bomb::before {
+  content: '💣';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 12px;
+  z-index: 20;
+}
+
+/* 锁定方块特效 */
+.cell.special-lock {
+  box-shadow: 
+    inset 2px 2px 4px rgba(100, 100, 255, 0.3),
+    inset -2px -2px 4px rgba(0, 0, 150, 0.3),
+    0 0 15px rgba(50, 50, 255, 0.5);
+}
+
+.cell.special-lock::before {
+  content: '🔒';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 12px;
+  z-index: 20;
+}
+
+/* 动画效果 */
+@keyframes currentBlock {
+  0% {
+    transform: scale(0.95);
+    opacity: 0.8;
+  }
+  50% {
+    transform: scale(1.02);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes specialShine {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 16px 16px;
+  }
+}
+
+/* 行消除动画 */
+.cell.clearing {
+  animation: lineClear 0.6s ease-out;
+}
+
+@keyframes lineClear {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.7;
+    background-color: white !important;
+  }
+  100% {
+    transform: scale(0);
+    opacity: 0;
+  }
+}
+
+/* 爆炸动画 */
+.cell.exploding {
+  animation: explosion 0.8s ease-out;
+}
+
+@keyframes explosion {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  30% {
+    transform: scale(1.3);
+    opacity: 0.8;
+    background-color: #ff6b6b !important;
+    box-shadow: 0 0 20px #ff6b6b;
+  }
+  70% {
+    transform: scale(1.1);
+    opacity: 0.4;
+  }
+  100% {
+    transform: scale(0);
+    opacity: 0;
+  }
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .gameBoard {
+    max-width: 300px;
+    max-height: 600px;
+    border-width: 1px;
+    padding: 2px;
+  }
+  
+  .cell {
+    min-height: 15px;
+    min-width: 15px;
+  }
+  
+  .cell.special-bomb::before,
+  .cell.special-lock::before {
+    font-size: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .gameBoard {
+    max-width: 250px;
+    max-height: 500px;
+    gap: 0.5px;
+    padding: 1px;
+  }
+  
+  .cell {
+    min-height: 12px;
+    min-width: 12px;
+    border-radius: 1px;
+  }
+  
+  .cell.special-bomb::before,
+  .cell.special-lock::before {
+    font-size: 8px;
+  }
+}
+
+/* 暗色主题 */
+[data-theme="dark"] .gameBoard {
+  --color-board-background: #0d1117;
+  --color-board-border: #30363d;
+  --color-grid-line: #21262d;
+  --color-cell-empty: transparent;
+  --color-ghost: rgba(255, 255, 255, 0.2);
+}
+
+/* 亮色主题 */
+[data-theme="light"] .gameBoard {
+  --color-board-background: #ffffff;
+  --color-board-border: #d0d7de;
+  --color-grid-line: #f6f8fa;
+  --color-cell-empty: transparent;
+  --color-ghost: rgba(0, 0, 0, 0.2);
+}
+
+/* 蓝色主题 */
+[data-theme="blue"] .gameBoard {
+  --color-board-background: #0f1419;
+  --color-board-border: #1e3a8a;
+  --color-grid-line: #1e40af;
+  --color-cell-empty: transparent;
+  --color-ghost: rgba(59, 130, 246, 0.3);
+}
+
+/* 绿色主题 */
+[data-theme="green"] .gameBoard {
+  --color-board-background: #0f1b0f;
+  --color-board-border: #166534;
+  --color-grid-line: #15803d;
+  --color-cell-empty: transparent;
+  --color-ghost: rgba(34, 197, 94, 0.3);
+}
+
+/* 性能优化 */
+.gameBoard {
+  will-change: transform;
+  contain: layout style paint;
+}
+
+.cell {
+  will-change: background-color, transform, opacity;
+  contain: layout style paint;
+}
