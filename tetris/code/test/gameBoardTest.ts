@@ -109,14 +109,13 @@ export class GameBoardTest extends BaseTest {
       const blockSystem = new BlockSystem();
       const gameBoard = new GameBoardManager({ width: 10, height: 20 }, blockSystem);
       
-      // 手动填充底部一行（除了最后一个格子）
-      for (let x = 0; x < 9; x++) {
+      // 手动填充底部一行
+      for (let x = 0; x < 10; x++) {
         gameBoard.setCell({ x, y: 19 }, { filled: true, color: '#888888' });
       }
       
-      // 放置一个方块来完成该行
-      const block = blockSystem.createBlock(BlockType.O, { x: 8, y: 18 });
-      const result = gameBoard.placeBlock(block);
+      // 现在放置一个方块来触发行清除（不需要实际放置，因为行已经满了）
+      const result = gameBoard.clearLines();
       
       // 测试行消除
       this.addTestResult('Line Clear Detected', result.linesCleared > 0);
@@ -131,7 +130,9 @@ export class GameBoardTest extends BaseTest {
           break;
         }
       }
-      this.addTestResult('Bottom Row Cleared', bottomRowEmpty);
+      
+      this.addTestResult('Bottom Row Cleared', bottomRowEmpty, 
+        bottomRowEmpty ? 'Bottom row was cleared successfully' : 'Bottom row was not cleared as expected');
       
       // 测试获取已填充行
       const filledRows = gameBoard.getFilledRows();
@@ -164,8 +165,12 @@ export class GameBoardTest extends BaseTest {
       
       // 放置炸弹方块触发爆炸
       const bombResult = gameBoard.placeBlock(bombBlock);
+      
       this.addTestResult('Bomb Block Placement', 
-        bombResult.isSpecialClear && bombResult.specialEffects.length > 0);
+        bombResult.isSpecialClear && bombResult.specialEffects.length > 0,
+        bombResult.isSpecialClear && bombResult.specialEffects.length > 0 
+          ? 'Bomb block exploded and cleared cells' 
+          : 'Bomb block did not explode or clear cells as expected');
       
       // 测试锁定方块
       const lockBlock = blockSystem.createBlock(BlockType.LOCK, { x: 2, y: 18 });

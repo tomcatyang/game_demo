@@ -16,7 +16,7 @@ export class MemoryStorageAdapter implements IStorageAdapter {
   private readonly data = new Map<string, MemoryStorageItem>();
   private readonly maxSize: number;
   private readonly defaultTTL?: number;
-  private cleanupTimer?: NodeJS.Timeout;
+  private cleanupTimer?: number;
 
   constructor(config: { 
     maxSize?: number; 

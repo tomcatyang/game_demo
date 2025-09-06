@@ -64,6 +64,8 @@ export class GameBoardManager {
   // 放置方块
   placeBlock(block: Block): LineClearResult {
     const positions = this.blockSystem.getBlockPositions(block);
+    let immediateSpecialEffects: SpecialEffect[] = [];
+    let immediatePoints = 0;
     
     // 放置方块到网格
     positions.forEach(pos => {
@@ -78,13 +80,26 @@ export class GameBoardManager {
 
         // 处理特殊方块效果
         if (block.isSpecial) {
-          this.handleSpecialBlockPlacement(pos, block);
+          const effect = this.handleSpecialBlockPlacement(pos, block);
+          if (effect) {
+            immediateSpecialEffects.push(effect);
+            immediatePoints += this.applySpecialEffect(effect);
+          }
         }
       }
     });
 
     // 检查并清除行
-    return this.clearLines();
+    const lineClearResult = this.clearLines();
+    
+    // 合并立即效果和行清除效果
+    return {
+      linesCleared: lineClearResult.linesCleared,
+      clearedLineIndices: lineClearResult.clearedLineIndices,
+      pointsEarned: lineClearResult.pointsEarned + immediatePoints,
+      isSpecialClear: lineClearResult.isSpecialClear || immediateSpecialEffects.length > 0,
+      specialEffects: [...lineClearResult.specialEffects, ...immediateSpecialEffects],
+    };
   }
 
   // 清除行
@@ -293,8 +308,8 @@ export class GameBoardManager {
   }
 
   // 处理特殊方块放置
-  private handleSpecialBlockPlacement(position: Position, block: Block): void {
-    if (!block.isSpecial || !block.specialType) return;
+  private handleSpecialBlockPlacement(position: Position, block: Block): SpecialEffect | null {
+    if (!block.isSpecial || !block.specialType) return null;
 
     switch (block.specialType) {
       case SpecialBlockType.LOCK: {
@@ -303,9 +318,15 @@ export class GameBoardManager {
           unlockTime: Date.now() + BLOCK_CONSTANTS.LOCK_DURATION,
           originalColor: block.color,
         });
-        break;
+        return null; // 锁定方块没有立即效果
+      }
+      case SpecialBlockType.BOMB: {
+        // 炸弹方块立即爆炸
+        return this.createBombEffect(position);
       }
     }
+    
+    return null;
   }
 
   // 处理行中的特殊方块

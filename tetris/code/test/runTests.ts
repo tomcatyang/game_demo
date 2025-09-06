@@ -181,7 +181,7 @@ async function main(): Promise<void> {
 }
 
 // 如果直接运行此文件
-if (require.main === module) {
+if (import.meta.url === `file://${process.argv[1]}`) {
   main().catch(error => {
     console.error('💥 Test runner failed:', error);
     process.exit(1);

@@ -322,13 +322,13 @@ export class IndexedDBAdapter implements IStorageAdapter {
   // 按条件查询
   async query(condition: {
     indexName?: string;
-    value?: unknown;
+    value?: IDBValidKey;
     range?: IDBKeyRange;
     limit?: number;
   }): Promise<Array<{ key: string; value: unknown; timestamp: number }>> {
     try {
       const store = await this.getObjectStore('readonly');
-      let request: IDBRequest;
+      let request: IDBRequest<unknown[]>;
       
       if (condition.indexName) {
         const index = store.index(condition.indexName);
@@ -344,7 +344,7 @@ export class IndexedDBAdapter implements IStorageAdapter {
       }
       
       const results = await this.executeRequest(request);
-      return results.map((item) => ({
+      return results.map((item: any) => ({
         key: item.key,
         value: item.value,
         timestamp: item.timestamp

@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test": "tsx --tsconfig tsconfig.app.json test/index.ts"
   },
   "dependencies": {
     "react": "^19.1.1",

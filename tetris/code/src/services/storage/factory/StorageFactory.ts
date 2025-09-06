@@ -200,12 +200,12 @@ export class StorageFactory implements IStorageFactory {
     features: string[];
     performance: 'high' | 'medium' | 'low';
   }>> {
-    const capabilities: Record<StorageType, {
+    const capabilities = {} as Record<StorageType, {
       available: boolean;
       maxSize?: number;
       features: string[];
       performance: 'high' | 'medium' | 'low';
-    }> = {};
+    }>;
     
     for (const type of Object.values(StorageType)) {
       try {

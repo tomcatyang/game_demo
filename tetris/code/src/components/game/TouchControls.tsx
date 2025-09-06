@@ -54,7 +54,7 @@ const ControlButton = memo<ControlButtonProps>(({
   className = '',
 }) => {
   const [isPressed, setIsPressed] = useState(false);
-  const longPressTimer = useRef<NodeJS.Timeout | null>(null);
+  const longPressTimer = useRef<number | null>(null);
 
   const handleTouchStart = useCallback(() => {
     if (disabled) return;

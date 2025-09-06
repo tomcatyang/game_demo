@@ -1,4 +1,19 @@
 // 测试入口文件
+declare const global: {
+  requestAnimationFrame: (callback: FrameRequestCallback) => number;
+  cancelAnimationFrame: (id: number) => void;
+};
+
+// Node.js 环境下的 requestAnimationFrame polyfill
+if (typeof requestAnimationFrame === 'undefined') {
+  (global as any).requestAnimationFrame = (callback: FrameRequestCallback) => {
+    return setTimeout(callback, 1000 / 60);
+  };
+  (global as any).cancelAnimationFrame = (id: number) => {
+    clearTimeout(id);
+  };
+}
+
 import { testRunner } from './utils/testUtils';
 import { GameEngineTest } from './gameEngineTest';
 import { BlockSystemTest } from './blockSystemTest';
@@ -85,3 +100,76 @@ export { ScoreSystemTest } from './scoreSystemTest';
 export { IntegrationTest } from './integration/integrationTest';
 export { StorageSystemTest } from './storageSystemTest';
 export { BaseTest, TestRunner, MockDataGenerator, PerformanceTestUtils } from './utils/testUtils';
+
+
+// Node.js 类型声明
+declare const process: {
+  argv: string[];
+  exit: (code?: number) => never;
+};
+
+declare const require: {
+  main: any;
+};
+
+// 命令行参数处理
+const args = process.argv.slice(2);
+const testType = args[0];
+
+// 根据参数运行不同的测试
+async function runTests() {
+  console.log('🚀 Starting Tests...\n');
+  
+  switch (testType) {
+    case 'engine':
+      console.log('🎮 Running Game Engine Tests...');
+      const engineResult = await runGameEngineTests();
+      console.log(`Game Engine Tests: ${engineResult ? '✅ PASSED' : '❌ FAILED'}`);
+      break;
+      
+    case 'block':
+      console.log('🧩 Running Block System Tests...');
+      const blockResult = await runBlockSystemTests();
+      console.log(`Block System Tests: ${blockResult ? '✅ PASSED' : '❌ FAILED'}`);
+      break;
+      
+    case 'board':
+      console.log('🎯 Running Game Board Tests...');
+      const boardResult = await runGameBoardTests();
+      console.log(`Game Board Tests: ${boardResult ? '✅ PASSED' : '❌ FAILED'}`);
+      break;
+      
+    case 'score':
+      console.log('📊 Running Score System Tests...');
+      const scoreResult = await runScoreSystemTests();
+      console.log(`Score System Tests: ${scoreResult ? '✅ PASSED' : '❌ FAILED'}`);
+      break;
+      
+    case 'storage':
+      console.log('💾 Running Storage System Tests...');
+      const storageResult = await runStorageSystemTests();
+      console.log(`Storage System Tests: ${storageResult ? '✅ PASSED' : '❌ FAILED'}`);
+      break;
+      
+    case 'integration':
+      console.log('🔗 Running Integration Tests...');
+      const integrationResult = await runIntegrationTests();
+      console.log(`Integration Tests: ${integrationResult ? '✅ PASSED' : '❌ FAILED'}`);
+      break;
+      
+    case 'all':
+    default:
+      console.log('🎯 Running All Tests...');
+      const allResult = await runAllTests();
+      console.log(`All Tests: ${allResult ? '✅ PASSED' : '❌ FAILED'}`);
+      break;
+  }
+}
+
+// 如果直接运行此文件
+if (import.meta.url === `file://${process.argv[1]}`) {
+  runTests().catch(error => {
+    console.error('💥 Test failed:', error);
+    process.exit(1);
+  });
+}
