@@ -14,4 +14,27 @@ export default defineConfig({
       '@': '/src',
     },
   },
+  build: {
+    // 生成source map用于调试
+    sourcemap: true,
+    // 压缩选项
+    minify: 'terser',
+    terserOptions: {
+      compress: {
+        drop_console: true,
+        drop_debugger: true
+      }
+    }
+  },
+  server: {
+    // 开发服务器配置
+    port: 3000,
+    open: true,
+    cors: true
+  },
+  preview: {
+    // 预览服务器配置
+    port: 4173,
+    open: true
+  }
 })

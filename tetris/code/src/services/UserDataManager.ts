@@ -3,11 +3,9 @@ import {
   UserStats, 
   UserPreferences, 
   Achievement, 
-  UserSession,
   GameMode,
-  ThemeType,
   StorageType 
-} from '@/types';
+} from '../types';
 import { IStorageAdapter } from './storage/interfaces/StorageInterface';
 import { storageFactory } from './storage/factory/StorageFactory';
 
@@ -57,24 +55,43 @@ export class UserDataManager {
       }
 
       // 如果没有完整数据，尝试分别加载各部分
-      const [preferences, stats, achievements, session] = await Promise.all([
+      const [preferences, stats, achievements] = await Promise.all([
         this.loadPreferences(),
         this.loadStats(),
         this.loadAchievements(),
-        this.loadSession(),
       ]);
 
       this.userData = {
+        id: 'default-user',
+        name: 'Player',
+        createdAt: new Date(),
+        lastLoginAt: new Date(),
+        settings: {
+          theme: 'light' as any,
+          audio: {
+            backgroundMusic: true,
+            soundEffects: true,
+            volume: 0.7,
+          },
+          touch: {
+            sensitivity: 0.8,
+            swipeThreshold: 50,
+            tapDelay: 200,
+          },
+          autoSave: true,
+          showGrid: false,
+          showGhost: true,
+          fullscreen: false,
+        },
         preferences,
         stats,
         achievements,
-        session,
       };
 
       // 保存合并后的数据
       await this.saveUserData();
       
-      return this.userData;
+      return this.userData!;
     } catch (error) {
       console.error('Failed to load user data:', error);
       
@@ -101,7 +118,6 @@ export class UserDataManager {
         storage.set(this.PREFERENCES_KEY, this.userData.preferences),
         storage.set(this.STATS_KEY, this.userData.stats),
         storage.set(this.ACHIEVEMENTS_KEY, this.userData.achievements),
-        storage.set(this.SESSION_KEY, this.userData.session),
       ]);
     } catch (error) {
       console.error('Failed to save user data:', error);
@@ -111,29 +127,35 @@ export class UserDataManager {
 
   // 创建默认用户数据
   private createDefaultUserData(): UserData {
-    const now = Date.now();
     
     return {
-      preferences: {
-        theme: ThemeType.DARK,
+      id: 'default-user',
+      name: 'Player',
+      createdAt: new Date(),
+      lastLoginAt: new Date(),
+      settings: {
+        theme: 'light' as any,
         audio: {
-          masterVolume: 0.7,
-          musicVolume: 0.5,
-          sfxVolume: 0.8,
-          enableMusic: true,
-          enableSFX: true,
+          backgroundMusic: true,
+          soundEffects: true,
+          volume: 0.7,
         },
         touch: {
           sensitivity: 0.8,
-          enableHaptic: true,
-          enableGestures: true,
           swipeThreshold: 50,
           tapDelay: 200,
         },
-        language: 'zh-CN',
         autoSave: true,
-        showTutorial: true,
-        debugMode: false,
+        showGrid: false,
+        showGhost: true,
+        fullscreen: false,
+      },
+      preferences: {
+        language: 'zh-CN',
+        timezone: 'Asia/Shanghai',
+        notifications: true,
+        dataCollection: false,
+        autoBackup: true,
       },
       stats: {
         totalGames: 0,
@@ -146,33 +168,11 @@ export class UserDataManager {
           [GameMode.CHALLENGE]: 0,
         },
         averageScore: 0,
-        bestLevel: 1,
-        longestGame: 0,
-        fastestLine: 0,
-        maxCombo: 0,
-        perfectClears: 0,
-        tSpins: 0,
-        createdAt: now,
-        updatedAt: now,
+        gamesPerDay: 0,
+        longestSession: 0,
+        favoriteMode: GameMode.CLASSIC,
       },
       achievements: [],
-      session: {
-        currentGameId: null,
-        lastPlayTime: now,
-        currentStreak: 0,
-        dailyStats: {
-          games: 0,
-          score: 0,
-          lines: 0,
-          playTime: 0,
-          date: new Date().toDateString(),
-        },
-        preferences: {
-          lastGameMode: GameMode.CLASSIC,
-          lastDifficulty: 'medium',
-          autoRestart: false,
-        },
-      },
     };
   }
 
@@ -227,7 +227,6 @@ export class UserDataManager {
       this.userData!.stats = { 
         ...this.userData!.stats, 
         ...updates,
-        updatedAt: Date.now(),
       };
       
       await this.saveUserData();
@@ -265,7 +264,7 @@ export class UserDataManager {
       if (!existingAchievement) {
         this.userData!.achievements.push({
           ...achievement,
-          unlockedAt: Date.now(),
+          unlockedAt: new Date(),
         });
         
         await this.saveUserData();
@@ -277,49 +276,6 @@ export class UserDataManager {
   }
 
   // 加载会话数据
-  async loadSession(): Promise<UserSession> {
-    try {
-      const storage = await this.ensureStorage();
-      const session = await storage.get(this.SESSION_KEY) as UserSession | undefined;
-      
-      if (session) {
-        // 检查日期是否是今天
-        const today = new Date().toDateString();
-        if (session.dailyStats.date !== today) {
-          // 重置每日统计
-          session.dailyStats = {
-            games: 0,
-            score: 0,
-            lines: 0,
-            playTime: 0,
-            date: today,
-          };
-        }
-        
-        return session;
-      }
-      
-      return this.createDefaultUserData().session;
-    } catch (error) {
-      console.error('Failed to load session:', error);
-      return this.createDefaultUserData().session;
-    }
-  }
-
-  // 更新会话数据
-  async updateSession(updates: Partial<UserSession>): Promise<void> {
-    try {
-      if (!this.userData) {
-        await this.loadUserData();
-      }
-
-      this.userData!.session = { ...this.userData!.session, ...updates };
-      await this.saveUserData();
-    } catch (error) {
-      console.error('Failed to update session:', error);
-      throw error;
-    }
-  }
 
   // 记录游戏结果
   async recordGameResult(result: {
@@ -336,7 +292,6 @@ export class UserDataManager {
       }
 
       const stats = this.userData!.stats;
-      const session = this.userData!.session;
 
       // 更新统计数据
       stats.totalGames++;
@@ -352,25 +307,7 @@ export class UserDataManager {
         stats.highScores[result.mode] = result.score;
       }
       
-      // 更新最佳等级
-      stats.bestLevel = Math.max(stats.bestLevel, result.level);
-      
-      // 更新最长游戏时间
-      stats.longestGame = Math.max(stats.longestGame, result.playTime);
 
-      // 更新会话数据
-      session.lastPlayTime = Date.now();
-      session.dailyStats.games++;
-      session.dailyStats.score += result.score;
-      session.dailyStats.lines += result.lines;
-      session.dailyStats.playTime += result.playTime;
-      
-      // 更新连胜记录
-      if (result.score > 0) {
-        session.currentStreak++;
-      } else {
-        session.currentStreak = 0;
-      }
 
       await this.saveUserData();
     } catch (error) {

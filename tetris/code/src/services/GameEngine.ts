@@ -1,5 +1,5 @@
-import { GameState, GameInput, GameEvent } from '@/types';
-import { GameStateManager } from '@/store/gameState';
+import { GameState, GameInput, GameEvent } from '../types';
+import { GameStateManager } from '../store/gameState';
 
 // 游戏引擎配置
 interface GameEngineConfig {

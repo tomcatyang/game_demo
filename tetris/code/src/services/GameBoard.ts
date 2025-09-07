@@ -4,9 +4,9 @@ import {
   Block, 
   Position, 
   SpecialBlockType 
-} from '@/types';
+} from '../types';
 import { BlockSystem } from './BlockSystem';
-import { BLOCK_CONSTANTS } from '@/constants/blocks';
+import { BLOCK_CONSTANTS } from '../constants/blocks';
 
 // 行消除结果接口
 export interface LineClearResult {
@@ -73,7 +73,6 @@ export class GameBoardManager {
         this.board.grid[pos.y][pos.x] = {
           filled: true,
           color: block.color,
-          blockType: block.type,
           isSpecial: block.isSpecial,
           specialType: block.specialType,
         };
@@ -160,7 +159,13 @@ export class GameBoardManager {
     if (!this.isValidPosition(position)) {
       return null;
     }
-    return { ...this.board.grid[position.y][position.x] };
+    const cell = this.board.grid[position.y][position.x];
+    return {
+      filled: cell.filled,
+      color: cell.color || 'transparent',
+      isSpecial: cell.isSpecial,
+      specialType: cell.specialType as SpecialBlockType | undefined,
+    };
   }
 
   // 设置指定位置的格子
@@ -267,7 +272,7 @@ export class GameBoardManager {
       for (let x = 0; x < this.config.width; x++) {
         grid[y][x] = {
           filled: false,
-          color: '',
+          color: 'transparent',
         };
       }
     }

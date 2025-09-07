@@ -138,7 +138,6 @@ export class MemoryMonitor {
     total?: number;
     limit?: number;
   } {
-    // @ts-expect-error - memory API可能不存在
     const memory = (performance as typeof performance & { memory?: { usedJSHeapSize: number; totalJSHeapSize: number; jsHeapSizeLimit: number } }).memory;
     
     if (memory) {

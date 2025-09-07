@@ -122,8 +122,8 @@ const BlockPreview = memo<BlockPreviewProps>(({
       {/* 特殊方块图标 */}
       {isSpecial && (
         <div className={styles.specialIcon}>
-          {specialType === 'bomb' && '💣'}
-          {specialType === 'lock' && '🔒'}
+          {specialType === 'BOMB' && '💣'}
+          {specialType === 'LOCK' && '🔒'}
         </div>
       )}
     </div>

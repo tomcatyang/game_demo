@@ -1,3 +1,4 @@
+
 // 测试入口文件
 declare const global: {
   requestAnimationFrame: (callback: FrameRequestCallback) => number;
@@ -19,6 +20,13 @@ import { GameEngineTest } from './gameEngineTest';
 import { BlockSystemTest } from './blockSystemTest';
 import { GameBoardTest } from './gameBoardTest';
 import { ScoreSystemTest } from './scoreSystemTest';
+import { TouchControlsTest } from './touchControlsTest';
+import { GameModeTest } from './gameModeTest';
+import { SpecialBlockTest } from './specialBlockTest';
+import { ThemeTest } from './themeTest';
+import { AudioTest } from './audioTest';
+import { AchievementTest } from './achievementTest';
+import { SettingsTest } from './settingsTest';
 
 import { IntegrationTest } from './integration/integrationTest';
 import { StorageSystemTest } from './storageSystemTest';
@@ -29,6 +37,13 @@ export const setupTests = (): void => {
   testRunner.addTest(new BlockSystemTest());
   testRunner.addTest(new GameBoardTest());
   testRunner.addTest(new ScoreSystemTest());
+  testRunner.addTest(new TouchControlsTest());
+  testRunner.addTest(new GameModeTest());
+  testRunner.addTest(new SpecialBlockTest());
+  testRunner.addTest(new ThemeTest());
+  testRunner.addTest(new AudioTest());
+  testRunner.addTest(new AchievementTest());
+  testRunner.addTest(new SettingsTest());
 
   testRunner.addTest(new IntegrationTest());
   testRunner.addTest(new StorageSystemTest());
@@ -73,6 +88,63 @@ export const runScoreSystemTests = async (): Promise<boolean> => {
   return results.every(result => result.passed);
 };
 
+// 单独运行触摸控制测试
+export const runTouchControlsTests = async (): Promise<boolean> => {
+  const test = new TouchControlsTest();
+  await test.runAllTests();
+  const results = test.getResults();
+  return results.every(result => result.passed);
+};
+
+// 单独运行游戏模式测试
+export const runGameModeTests = async (): Promise<boolean> => {
+  const test = new GameModeTest();
+  await test.runAllTests();
+  const results = test.getResults();
+  return results.every(result => result.passed);
+};
+
+// 单独运行特殊方块测试
+export const runSpecialBlockTests = async (): Promise<boolean> => {
+  const test = new SpecialBlockTest();
+  await test.runAllTests();
+  const results = test.getResults();
+  return results.every(result => result.passed);
+};
+
+// 单独运行主题测试
+export const runThemeTests = async (): Promise<boolean> => {
+  const test = new ThemeTest();
+  await test.runAllTests();
+  const results = test.getResults();
+  return results.every(result => result.passed);
+};
+
+// 单独运行音效测试
+export const runAudioTests = async (): Promise<boolean> => {
+  const test = new AudioTest();
+  await test.runAllTests();
+  const results = test.getResults();
+  return results.every(result => result.passed);
+};
+
+// 单独运行成就测试
+export const runAchievementTests = async (): Promise<boolean> => {
+  const test = new AchievementTest();
+  await test.runAllTests();
+  const results = test.getResults();
+  return results.every(result => result.passed);
+};
+
+// 单独运行设置测试
+export const runSettingsTests = async (): Promise<boolean> => {
+  const test = new SettingsTest();
+  await test.runAllTests();
+  const results = test.getResults();
+  return results.every(result => result.passed);
+};
+
+
 
 
 // 单独运行集成测试
@@ -96,6 +168,12 @@ export { GameEngineTest } from './gameEngineTest';
 export { BlockSystemTest } from './blockSystemTest';
 export { GameBoardTest } from './gameBoardTest';
 export { ScoreSystemTest } from './scoreSystemTest';
+export { TouchControlsTest } from './touchControlsTest';
+export { GameModeTest } from './gameModeTest';
+export { SpecialBlockTest } from './specialBlockTest';
+export { ThemeTest } from './themeTest';
+export { AudioTest } from './audioTest';
+export { AchievementTest } from './achievementTest';
 
 export { IntegrationTest } from './integration/integrationTest';
 export { StorageSystemTest } from './storageSystemTest';
@@ -144,6 +222,49 @@ async function runTests() {
       const scoreResult = await runScoreSystemTests();
       console.log(`Score System Tests: ${scoreResult ? '✅ PASSED' : '❌ FAILED'}`);
       break;
+      
+    case 'touch':
+      console.log('👆 Running Touch Controls Tests...');
+      const touchResult = await runTouchControlsTests();
+      console.log(`Touch Controls Tests: ${touchResult ? '✅ PASSED' : '❌ FAILED'}`);
+      break;
+      
+    case 'mode':
+      console.log('🎮 Running Game Mode Tests...');
+      const modeResult = await runGameModeTests();
+      console.log(`Game Mode Tests: ${modeResult ? '✅ PASSED' : '❌ FAILED'}`);
+      break;
+      
+    case 'special':
+      console.log('💣 Running Special Block Tests...');
+      const specialResult = await runSpecialBlockTests();
+      console.log(`Special Block Tests: ${specialResult ? '✅ PASSED' : '❌ FAILED'}`);
+      break;
+      
+    case 'theme':
+      console.log('🎨 Running Theme Tests...');
+      const themeResult = await runThemeTests();
+      console.log(`Theme Tests: ${themeResult ? '✅ PASSED' : '❌ FAILED'}`);
+      break;
+      
+    case 'audio':
+      console.log('🔊 Running Audio Tests...');
+      const audioResult = await runAudioTests();
+      console.log(`Audio Tests: ${audioResult ? '✅ PASSED' : '❌ FAILED'}`);
+      break;
+      
+    case 'achievement':
+      console.log('🏆 Running Achievement Tests...');
+      const achievementResult = await runAchievementTests();
+      console.log(`Achievement Tests: ${achievementResult ? '✅ PASSED' : '❌ FAILED'}`);
+      break;
+      
+    case 'settings':
+      console.log('⚙️ Running Settings Tests...');
+      const settingsResult = await runSettingsTests();
+      console.log(`Settings Tests: ${settingsResult ? '✅ PASSED' : '❌ FAILED'}`);
+      break;
+      
       
     case 'storage':
       console.log('💾 Running Storage System Tests...');

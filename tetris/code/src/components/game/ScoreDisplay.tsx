@@ -1,7 +1,26 @@
 import React, { memo, useEffect, useState } from 'react';
-import { GameStats, LevelInfo, ComboInfo } from '@/types';
-import { ScoreFormatter } from '@/utils/scoreCalculator';
+import { GameStats } from '../../types';
+import { ScoreFormatter } from '../../utils/scoreCalculator';
 import styles from './ScoreDisplay.module.css';
+
+// 等级信息接口
+interface LevelInfo {
+  current: number;
+  next: number;
+  progress: number;
+  linesToNext: number;
+  linesCompleted: number;
+  linesRequired: number;
+}
+
+// 连击信息接口
+interface ComboInfo {
+  current: number;
+  max: number;
+  multiplier: number;
+  count: number;
+  maxCombo: number;
+}
 
 // 分数显示属性
 interface ScoreDisplayProps {

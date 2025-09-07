@@ -10,6 +10,8 @@ export type {
   IStorageListener,
   IStorageManager,
 } from './interfaces/StorageInterface';
+// 工厂层
+import { StorageFactory, storageFactory } from './factory/StorageFactory';
 
 export { StorageException } from './interfaces/StorageInterface';
 
@@ -17,9 +19,10 @@ export { StorageException } from './interfaces/StorageInterface';
 export { LocalStorageAdapter } from './adapters/LocalStorageAdapter';
 export { IndexedDBAdapter } from './adapters/IndexedDBAdapter';
 export { MemoryStorageAdapter } from './adapters/MemoryStorageAdapter';
+export { StorageFactory,storageFactory };
 
-// 工厂层
-export { StorageFactory, storageFactory } from './factory/StorageFactory';
+
+
 
 // 使用示例导出
 export const StorageExamples = {

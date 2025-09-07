@@ -1,6 +1,6 @@
 import { GameEngine } from './GameEngine';
-import { GameStateManager } from '@/store/gameState';
-import { GameConfig } from '@/types';
+import { GameStateManager } from '../store/gameState';
+import { GameConfig } from '../types';
 
 // 游戏引擎管理器
 export class GameEngineManager {

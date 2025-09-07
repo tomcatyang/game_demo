@@ -93,7 +93,7 @@ export class ScoreCalculator {
 
   // 预测分数变化
   static predictScoreChange(
-    currentScore: number,
+    _currentScore: number,
     action: ScoreAction,
     context: {
       lines?: number;

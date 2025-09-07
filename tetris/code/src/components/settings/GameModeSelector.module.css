@@ -1,0 +1,455 @@
+/* 游戏模式选择器容器 */
+.gameModeSelector {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px;
+  background: var(--color-background, #ffffff);
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.gameModeSelector.disabled {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+/* 头部区域 */
+.header {
+  text-align: center;
+  margin-bottom: 8px;
+}
+
+.title {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--color-text-primary, #1f2937);
+  margin: 0 0 8px 0;
+}
+
+.subtitle {
+  font-size: 16px;
+  color: var(--color-text-secondary, #6b7280);
+  margin: 0;
+}
+
+/* 模式网格 */
+.modeGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 20px;
+  margin-bottom: 24px;
+}
+
+/* 模式卡片 */
+.modeCard {
+  background: var(--color-card-background, #ffffff);
+  border: 2px solid var(--color-border, #e5e7eb);
+  border-radius: 12px;
+  padding: 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.modeCard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: var(--mode-color, #3b82f6);
+  transform: scaleX(0);
+  transition: transform 0.3s ease;
+}
+
+.modeCard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  border-color: var(--mode-color, #3b82f6);
+}
+
+.modeCard:hover::before {
+  transform: scaleX(1);
+}
+
+.modeCard.selected {
+  border-color: var(--mode-color, #3b82f6);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.modeCard.selected::before {
+  transform: scaleX(1);
+}
+
+.modeCard.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background: var(--color-disabled-background, #f9fafb);
+}
+
+/* 模式头部 */
+.modeHeader {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.modeIcon {
+  font-size: 32px;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.modeInfo {
+  flex: 1;
+  min-width: 0;
+}
+
+.modeName {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--color-text-primary, #1f2937);
+  margin: 0 0 8px 0;
+}
+
+.modeDescription {
+  font-size: 14px;
+  color: var(--color-text-secondary, #6b7280);
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* 模式统计 */
+.modeStats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 16px;
+  padding: 12px;
+  background: var(--color-stats-background, #f8fafc);
+  border-radius: 8px;
+}
+
+.statItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.statLabel {
+  font-size: 12px;
+  color: var(--color-text-tertiary, #9ca3af);
+  margin-bottom: 4px;
+}
+
+.statValue {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--color-text-primary, #1f2937);
+}
+
+/* 模式规则 */
+.modeRules {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.ruleItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--color-text-secondary, #6b7280);
+}
+
+.ruleIcon {
+  font-size: 14px;
+  width: 16px;
+  text-align: center;
+}
+
+.ruleText {
+  flex: 1;
+}
+
+/* 难度选择器 */
+.difficultySelector {
+  background: var(--color-section-background, #f8fafc);
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 24px;
+}
+
+.difficultyTitle {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--color-text-primary, #1f2937);
+  margin: 0 0 16px 0;
+}
+
+.difficultyOptions {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 12px;
+}
+
+.difficultyButton {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 16px 12px;
+  background: var(--color-button-background, #ffffff);
+  border: 2px solid var(--color-border, #e5e7eb);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.difficultyButton::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--difficulty-color, #3b82f6);
+  transform: scaleX(0);
+  transition: transform 0.2s ease;
+}
+
+.difficultyButton:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border-color: var(--difficulty-color, #3b82f6);
+}
+
+.difficultyButton:hover::before {
+  transform: scaleX(1);
+}
+
+.difficultyButton.selected {
+  border-color: var(--difficulty-color, #3b82f6);
+  background: rgba(59, 130, 246, 0.05);
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+}
+
+.difficultyButton.selected::before {
+  transform: scaleX(1);
+}
+
+.difficultyButton.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.difficultyLabel {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-text-primary, #1f2937);
+}
+
+.difficultyDescription {
+  font-size: 12px;
+  color: var(--color-text-secondary, #6b7280);
+}
+
+/* 当前配置 */
+.currentConfig {
+  background: var(--color-info-background, #eff6ff);
+  border: 1px solid var(--color-info-border, #bfdbfe);
+  border-radius: 8px;
+  padding: 16px;
+}
+
+.configTitle {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--color-text-primary, #1f2937);
+  margin: 0 0 12px 0;
+}
+
+.configInfo {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 8px;
+}
+
+.configItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--color-border-light, #f3f4f6);
+}
+
+.configItem:last-child {
+  border-bottom: none;
+}
+
+.configLabel {
+  font-size: 14px;
+  color: var(--color-text-secondary, #6b7280);
+  font-weight: 500;
+}
+
+.configValue {
+  font-size: 14px;
+  color: var(--color-text-primary, #1f2937);
+  font-weight: 600;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .gameModeSelector {
+    padding: 16px;
+    gap: 20px;
+  }
+
+  .title {
+    font-size: 24px;
+  }
+
+  .modeGrid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .modeCard {
+    padding: 16px;
+  }
+
+  .modeHeader {
+    gap: 12px;
+  }
+
+  .modeIcon {
+    font-size: 28px;
+  }
+
+  .modeName {
+    font-size: 18px;
+  }
+
+  .difficultyOptions {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .configInfo {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .gameModeSelector {
+    padding: 12px;
+    gap: 16px;
+  }
+
+  .modeCard {
+    padding: 12px;
+  }
+
+  .modeHeader {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 8px;
+  }
+
+  .modeIcon {
+    font-size: 24px;
+  }
+
+  .modeName {
+    font-size: 16px;
+  }
+
+  .modeDescription {
+    font-size: 13px;
+  }
+
+  .difficultyOptions {
+    grid-template-columns: 1fr;
+  }
+
+  .difficultyButton {
+    padding: 12px 8px;
+  }
+}
+
+/* 主题变量 */
+[data-theme="dark"] .gameModeSelector {
+  --color-background: #0d1117;
+  --color-text-primary: #f0f6fc;
+  --color-text-secondary: #7d8590;
+  --color-text-tertiary: #656d76;
+  --color-card-background: #161b22;
+  --color-border: #30363d;
+  --color-border-light: #21262d;
+  --color-section-background: #161b22;
+  --color-button-background: #21262d;
+  --color-stats-background: #0d1117;
+  --color-info-background: #0d1117;
+  --color-info-border: #30363d;
+  --color-disabled-background: #0d1117;
+}
+
+[data-theme="light"] .gameModeSelector {
+  --color-background: #ffffff;
+  --color-text-primary: #24292f;
+  --color-text-secondary: #656d76;
+  --color-text-tertiary: #8b949e;
+  --color-card-background: #ffffff;
+  --color-border: #d0d7de;
+  --color-border-light: #f6f8fa;
+  --color-section-background: #f6f8fa;
+  --color-button-background: #ffffff;
+  --color-stats-background: #f6f8fa;
+  --color-info-background: #f1f8ff;
+  --color-info-border: #dbeafe;
+  --color-disabled-background: #f6f8fa;
+}
+
+/* 动画效果 */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.modeCard {
+  animation: fadeInUp 0.3s ease-out;
+}
+
+.modeCard:nth-child(1) { animation-delay: 0.1s; }
+.modeCard:nth-child(2) { animation-delay: 0.2s; }
+.modeCard:nth-child(3) { animation-delay: 0.3s; }
+.modeCard:nth-child(4) { animation-delay: 0.4s; }
+
+/* 性能优化 */
+.modeCard {
+  will-change: transform, box-shadow;
+  contain: layout style paint;
+}
+
+.difficultyButton {
+  will-change: transform, background-color;
+  contain: layout style paint;
+}

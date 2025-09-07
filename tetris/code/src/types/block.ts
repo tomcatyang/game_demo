@@ -44,6 +44,21 @@ export interface Block {
   timestamp: number;
 }
 
+// 游戏板格子接口
+export interface GameBoardCell {
+  filled: boolean;
+  color?: string;
+  isSpecial?: boolean;
+  specialType?: string;
+}
+
+// 游戏板接口
+export interface GameBoard {
+  width: number;
+  height: number;
+  grid: GameBoardCell[][];
+}
+
 // 下一个方块预览接口
 export interface NextBlock {
   type: BlockType;
@@ -75,7 +90,7 @@ export interface GridCell {
 export interface GameBoard {
   width: number;
   height: number;
-  grid: GridCell[][];
+  grid: GameBoardCell[][];
 }
 
 // 碰撞检测结果接口

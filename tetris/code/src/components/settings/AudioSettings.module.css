@@ -1,0 +1,603 @@
+/* 音效设置容器 */
+.audioSettings {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 24px;
+  background: var(--color-background, #ffffff);
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.audioSettings.disabled {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+/* 头部区域 */
+.header {
+  text-align: center;
+  margin-bottom: 8px;
+}
+
+.title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--color-text-primary, #1f2937);
+  margin: 0 0 8px 0;
+}
+
+.subtitle {
+  font-size: 16px;
+  color: var(--color-text-secondary, #6b7280);
+  margin: 0;
+}
+
+/* 内容区域 */
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+/* 设置区域 */
+.section {
+  background: var(--color-surface, #f8fafc);
+  border-radius: 12px;
+  padding: 20px;
+  border: 1px solid var(--color-border, #e5e7eb);
+}
+
+.sectionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.sectionTitle {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--color-text-primary, #1f2937);
+  margin: 0;
+}
+
+.sectionDescription {
+  font-size: 14px;
+  color: var(--color-text-secondary, #6b7280);
+  margin: 0;
+}
+
+/* 开关组件 */
+.toggle {
+  position: relative;
+  display: inline-block;
+  width: 48px;
+  height: 24px;
+  cursor: pointer;
+}
+
+.toggle input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.toggleSlider {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--color-border, #e5e7eb);
+  border-radius: 24px;
+  transition: all 0.3s ease;
+}
+
+.toggleSlider::before {
+  content: '';
+  position: absolute;
+  height: 18px;
+  width: 18px;
+  left: 3px;
+  bottom: 3px;
+  background: white;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.toggle input:checked + .toggleSlider {
+  background: var(--color-primary, #3b82f6);
+}
+
+.toggle input:checked + .toggleSlider::before {
+  transform: translateX(24px);
+}
+
+.toggle:hover .toggleSlider {
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+/* 音量控制 */
+.volumeControls {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-bottom: 16px;
+}
+
+.volumeSlider {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.volumeLabel {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 500;
+  color: var(--color-text-primary, #1f2937);
+}
+
+.volumeIcon {
+  font-size: 16px;
+}
+
+.volumeText {
+  flex: 1;
+}
+
+.volumeValue {
+  font-size: 14px;
+  color: var(--color-text-secondary, #6b7280);
+  min-width: 40px;
+  text-align: right;
+}
+
+.sliderWrapper {
+  position: relative;
+  height: 20px;
+  display: flex;
+  align-items: center;
+}
+
+.slider {
+  width: 100%;
+  height: 6px;
+  border-radius: 3px;
+  background: var(--color-border, #e5e7eb);
+  outline: none;
+  appearance: none;
+  cursor: pointer;
+  position: relative;
+  z-index: 2;
+}
+
+.slider::-webkit-slider-thumb {
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--slider-color, #3b82f6);
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  transition: all 0.2s ease;
+}
+
+.slider::-webkit-slider-thumb:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.slider::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--slider-color, #3b82f6);
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+.sliderTrack {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  height: 6px;
+  background: var(--slider-color, #3b82f6);
+  border-radius: 3px;
+  transform: translateY(-50%);
+  width: var(--slider-percentage, 0%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* 音量操作按钮 */
+.volumeActions {
+  display: flex;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.testButton {
+  padding: 8px 16px;
+  background: var(--color-primary, #3b82f6);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.testButton:hover {
+  background: var(--color-primary-hover, #2563eb);
+  transform: translateY(-1px);
+}
+
+.testButton:active {
+  transform: translateY(0);
+}
+
+.testButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* 高级设置 */
+.advancedSettings {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.settingItem {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.settingLabel {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  font-weight: 500;
+  color: var(--color-text-primary, #1f2937);
+}
+
+.settingLabel input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--color-primary, #3b82f6);
+  cursor: pointer;
+}
+
+.checkboxLabel {
+  flex: 1;
+}
+
+.settingDescription {
+  font-size: 14px;
+  color: var(--color-text-secondary, #6b7280);
+  margin: 0 0 0 30px;
+}
+
+/* 滑块设置 */
+.sliderSetting {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.sliderLabel {
+  font-weight: 500;
+  color: var(--color-text-primary, #1f2937);
+  font-size: 14px;
+}
+
+.rangeSlider {
+  width: 100%;
+  height: 6px;
+  border-radius: 3px;
+  background: var(--color-border, #e5e7eb);
+  outline: none;
+  appearance: none;
+  cursor: pointer;
+}
+
+.rangeSlider::-webkit-slider-thumb {
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--color-primary, #3b82f6);
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.rangeSlider::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--color-primary, #3b82f6);
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.sliderDescription {
+  font-size: 12px;
+  color: var(--color-text-tertiary, #9ca3af);
+  margin: 0;
+}
+
+/* 音效预览 */
+.audioPreview {
+  background: var(--color-surface, #f8fafc);
+  border-radius: 12px;
+  padding: 20px;
+  border: 1px solid var(--color-border, #e5e7eb);
+}
+
+.previewTitle {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--color-text-primary, #1f2937);
+  margin: 0 0 16px 0;
+}
+
+.previewCategories {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.previewCategory {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.categoryTitle {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--color-text-primary, #1f2937);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.categoryIcon {
+  font-size: 18px;
+}
+
+.previewSounds {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 8px;
+}
+
+.previewButton {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 12px 8px;
+  background: var(--color-background, #ffffff);
+  border: 1px solid var(--color-border, #e5e7eb);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--color-text-primary, #1f2937);
+}
+
+.previewButton:hover {
+  background: var(--color-primary, #3b82f6);
+  color: white;
+  border-color: var(--color-primary, #3b82f6);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+.previewButton.playing {
+  background: var(--color-success, #10b981);
+  color: white;
+  border-color: var(--color-success, #10b981);
+}
+
+.previewButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.soundIcon {
+  font-size: 20px;
+}
+
+.soundName {
+  text-align: center;
+  line-height: 1.2;
+}
+
+.playingIndicator {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  font-size: 12px;
+  animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* 操作按钮 */
+.actions {
+  display: flex;
+  justify-content: center;
+  margin-top: 16px;
+}
+
+.resetButton {
+  padding: 12px 24px;
+  background: var(--color-secondary, #6b7280);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.resetButton:hover {
+  background: var(--color-secondary-hover, #4b5563);
+  transform: translateY(-1px);
+}
+
+.resetButton:active {
+  transform: translateY(0);
+}
+
+.resetButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .audioSettings {
+    padding: 16px;
+    gap: 20px;
+  }
+
+  .title {
+    font-size: 20px;
+  }
+
+  .section {
+    padding: 16px;
+  }
+
+  .volumeControls {
+    gap: 16px;
+  }
+
+  .previewSounds {
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 6px;
+  }
+
+  .previewButton {
+    padding: 10px 6px;
+    font-size: 11px;
+  }
+
+  .soundIcon {
+    font-size: 18px;
+  }
+
+  .volumeActions {
+    flex-direction: column;
+  }
+
+  .testButton {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .audioSettings {
+    padding: 12px;
+    gap: 16px;
+  }
+
+  .section {
+    padding: 12px;
+  }
+
+  .previewSounds {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .previewButton {
+    padding: 8px 4px;
+  }
+
+  .soundIcon {
+    font-size: 16px;
+  }
+
+  .soundName {
+    font-size: 10px;
+  }
+}
+
+/* 主题变量 */
+[data-theme="dark"] .audioSettings {
+  --color-background: #0d1117;
+  --color-text-primary: #f0f6fc;
+  --color-text-secondary: #7d8590;
+  --color-surface: #161b22;
+  --color-border: #30363d;
+  --color-primary-hover: #58a6ff;
+  --color-secondary-hover: #6b7280;
+}
+
+[data-theme="light"] .audioSettings {
+  --color-background: #ffffff;
+  --color-text-primary: #24292f;
+  --color-text-secondary: #656d76;
+  --color-surface: #f6f8fa;
+  --color-border: #d0d7de;
+  --color-primary-hover: #0969da;
+  --color-secondary-hover: #4b5563;
+}
+
+/* 动画效果 */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.section {
+  animation: fadeInUp 0.3s ease-out;
+}
+
+.section:nth-child(1) { animation-delay: 0.1s; }
+.section:nth-child(2) { animation-delay: 0.2s; }
+.section:nth-child(3) { animation-delay: 0.3s; }
+.section:nth-child(4) { animation-delay: 0.4s; }
+
+/* 性能优化 */
+.volumeSlider,
+.previewButton,
+.testButton {
+  will-change: transform, background-color;
+  contain: layout style paint;
+}
+
+.slider {
+  will-change: transform;
+  contain: layout style paint;
+}

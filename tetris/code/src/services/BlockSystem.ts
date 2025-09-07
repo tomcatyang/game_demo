@@ -6,14 +6,14 @@ import {
   NextBlock,
   GameBoard,
   CollisionResult 
-} from '@/types';
+} from '../types';
 import { 
   BLOCK_CONFIG, 
   BASIC_BLOCK_TYPES, 
   SPECIAL_BLOCK_TYPES, 
   BLOCK_WEIGHTS,
   BLOCK_CONSTANTS 
-} from '@/constants/blocks';
+} from '../constants/blocks';
 
 // 方块系统配置
 interface BlockSystemConfig {
